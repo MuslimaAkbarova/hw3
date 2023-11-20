@@ -11,7 +11,7 @@ class _MealPlanState extends State<MealPlan> {
   String selectedDay = 'Mon'; // Default selected day
   
   Map<String, dynamic> mealData = {
-    'photo': 'pancakes.jpg',
+    'photo': 'assets/images/pancakes.jpg',
     'description': 'Delicious pancakes for breakfast!',
     'ingredients': {
       'Flour': '200g',
@@ -99,7 +99,7 @@ class _MealPlanState extends State<MealPlan> {
     return Column(
       children: <Widget>[
         Image.asset(
-          mealData['photo'],
+          mealData['photo'].toString(),
           height: 150,
           width: 150,
           fit: BoxFit.cover,
