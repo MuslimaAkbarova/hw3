@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'services/DBconnector.dart';
 import 'models/UserModel.dart';
 
-class LogIn extends StatelessWidget {
+class Register extends StatelessWidget {
   final User? user;
-  const LogIn({Key? key, this.user}) : super(key: key);
+  const Register({Key? key, this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final nameController = TextEditingController();
+    final usernameController = TextEditingController();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
-    int? currentUser;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LogIn'),
+        title: const Text('Register'),
         backgroundColor: Colors.green,
       ),
       body: Center(
@@ -23,7 +24,22 @@ class LogIn extends StatelessWidget {
             Container(
               margin: EdgeInsets.all(20.0),
               child: Column(
-                children: [
+                children: [TextFormField(
+                  controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: usernameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: emailController,
                     decoration: const InputDecoration(
@@ -54,34 +70,21 @@ class LogIn extends StatelessWidget {
                 ),
               ),
               child: const Text(
-                'Log In',
+                'Register',
                 style: TextStyle(fontSize: 18),
               ),
               onPressed: () async {
+                final nameField = nameController.value.text;
+                final usernameField = usernameController.value.text;
                 final emailField = emailController.value.text;
                 final passwordField = passwordController.value.text;
-                if(emailField.isEmpty || passwordField.isEmpty){
+                if(nameField.isEmpty || usernameField.isEmpty || emailField.isEmpty || passwordField.isEmpty) {
                   return;
                 }
-                currentUser = await DatabaseConnector.userLogin(emailController.value.text, passwordController.value.text);
-                if(currentUser!=null) {
-                  Navigator.pushNamed(context, '/homepage');
-                }
+                final User model = User(user_id: user?.user_id, name: nameField, username: usernameField, email: emailField, password: passwordField);
+                await DatabaseConnector.addUser(model);
+                Navigator.pushNamed(context, '/login');               
               },
-            ),
-            const SizedBox(height: 10),
-            TextButton(
-              style: TextButton.styleFrom(
-                primary: Colors.green,
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/register');
-              },
-              child: const Text(
-                'Register',
-                style: TextStyle(fontSize: 16),
-              ),
             ),
           ],
         ),
