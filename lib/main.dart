@@ -8,6 +8,7 @@ import 'ShoppingList.dart';
 import 'services/DBconnector.dart';
  
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   DatabaseConnector dbConnector = DatabaseConnector();
   await dbConnector.init();
   runApp(MaterialApp(
