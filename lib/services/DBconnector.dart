@@ -1,43 +1,61 @@
+import 'dart:io';
 import 'package:hw3/models/UserModel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 class DatabaseConnector {
-  static const int _version = 1;
-  static const String _dbname = "Foodish.db";
-  static const String _dbpath = "assets/Foodish.db";
+  
+  static final DatabaseConnector _instance = DatabaseConnector._internal();
+  factory DatabaseConnector() => _instance;
 
-  static Future<Database> _getDB() async {
-    // return openDatabase(join(await getDatabasesPath(), _dbname),
-    return openDatabase(_dbpath,
-    onCreate: (db, version) async => await db.execute("CREATE TABLE users(user_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL);"), version: _version
-    );
+  late Database _database;
+
+  Future<Database> get database async {
+    return _database;
   }
 
-  static Future<int> addUser(User user) async {
-    final db = await _getDB();
+  DatabaseConnector._internal();
+
+  Future<Database> _initDatabase() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, "foodish.db");
+
+    return await openDatabase(path, version: 1,
+    onCreate: _onCreate);
+  }
+
+  Future<void> _onCreate(Database db, int version) async {
+    await db.execute('''"CREATE TABLE users(user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    name TEXT NOT NULL, username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL);"
+    ''');
+  }
+
+  Future<int> addUser(User user) async {
+    final db = await database;
     return await db.insert("users", user.toJson(),
     conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future<int> updateUser(User user) async {
-    final db = await _getDB();
+  Future<int> updateUser(User user) async {
+    final db = await database;
     return await db.update("users", user.toJson(),
     where: 'user_id=?',
     whereArgs: [user.user_id],
     conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future<int> deleteUser(User user) async {
-    final db = await _getDB();
+  Future<int> deleteUser(User user) async {
+    final db = await database;
     return await db.delete("users",
     where: "user_id=?",
     whereArgs: [user.user_id],
     );
   }
 
-  static Future<int?> userLogin(String email, String password) async {
-    final db = await _getDB();
+  Future<int?> userLogin(String email, String password) async {
+    final db = await database;
     final result = await db.query(
     "users",
     columns: ["user_id"],
@@ -51,4 +69,9 @@ class DatabaseConnector {
     return null;
   }
   }
+
+  Future<void> init() async {
+    _database = await _initDatabase();
+  }
+  
 }

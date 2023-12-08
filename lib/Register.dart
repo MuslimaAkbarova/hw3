@@ -82,7 +82,8 @@ class Register extends StatelessWidget {
                   return;
                 }
                 final User model = User(user_id: user?.user_id, name: nameField, username: usernameField, email: emailField, password: passwordField);
-                await DatabaseConnector.addUser(model);
+                DatabaseConnector dbConnector = DatabaseConnector();
+                await dbConnector.addUser(model);
                 Navigator.pushNamed(context, '/login');               
               },
             ),

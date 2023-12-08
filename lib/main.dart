@@ -1,6 +1,3 @@
-// import 'dart:io';
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-// import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'Homepage.dart';
 import 'Login.dart';
@@ -8,10 +5,11 @@ import 'Profile.dart';
 import 'MealPlan.dart';
 import 'Register.dart';
 import 'ShoppingList.dart';
+import 'services/DBconnector.dart';
  
-void main() {
-  // sqfliteFfiInit();
-  // databaseFactory = databaseFactoryFfi;
+void main() async {
+  DatabaseConnector dbConnector = DatabaseConnector();
+  await dbConnector.init();
   runApp(MaterialApp(
     initialRoute: '/login',
     routes: {

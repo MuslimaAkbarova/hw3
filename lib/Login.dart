@@ -63,7 +63,8 @@ class LogIn extends StatelessWidget {
                 if(emailField.isEmpty || passwordField.isEmpty){
                   return;
                 }
-                currentUser = await DatabaseConnector.userLogin(emailController.value.text, passwordController.value.text);
+                DatabaseConnector dbConnector = DatabaseConnector();
+                currentUser = await dbConnector.userLogin(emailController.value.text, passwordController.value.text);
                 if(currentUser!=null) {
                   Navigator.pushNamed(context, '/homepage');
                 }
