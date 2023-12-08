@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 class DatabaseConnector {
   static const int _version = 1;
   static const String _dbname = "Foodish.db";
-  static const String _dbpath = "assets/images/Foodish.db";
+  static const String _dbpath = "assets/Foodish.db";
 
   static Future<Database> _getDB() async {
     // return openDatabase(join(await getDatabasesPath(), _dbname),
