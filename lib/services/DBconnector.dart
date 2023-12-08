@@ -19,8 +19,9 @@ class DatabaseConnector {
   DatabaseConnector._internal();
 
   Future<Database> _initDatabase() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "foodish.db");
+    // Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    // String path = join(documentsDirectory.path, "foodish.db");
+    String path = "assets/foodish.db";
 
     return await openDatabase(path, version: 1,
     onCreate: _onCreate);
@@ -73,5 +74,5 @@ class DatabaseConnector {
   Future<void> init() async {
     _database = await _initDatabase();
   }
-  
+
 }
