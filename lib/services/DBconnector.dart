@@ -5,9 +5,11 @@ import 'package:path/path.dart';
 class DatabaseConnector {
   static const int _version = 1;
   static const String _dbname = "Foodish.db";
+  static const String _dbpath = "assets/images/Foodish.db";
 
   static Future<Database> _getDB() async {
-    return openDatabase(join(await getDatabasesPath(), _dbname),
+    // return openDatabase(join(await getDatabasesPath(), _dbname),
+    return openDatabase(_dbpath,
     onCreate: (db, version) async => await db.execute("CREATE TABLE users(user_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL);"), version: _version
     );
   }
